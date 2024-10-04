@@ -54,28 +54,45 @@ module.exports.newMiddleBanner = newMiddleBanner;
 
 
 
-const updateMiddleBanner = async (req, res) => {
-    try {
-
-        await middleBannerModel.updateOne(
-            { _id: req.body.goalId }
-        )
-        res.status(200).json({ msg: "بنر با موفقیت بروزرسانی شد" });
-    }
-    catch (err) {
-        console.log(err);
-        res.status(400).json({ msg: "Error in Update Middle Banner" })
-    }
-}
-
-module.exports.updateMiddleBanner = updateMiddleBanner;
-
-
-
 const deleteMiddleBanner = async (req, res) => {
     try {
 
         await middleBannerModel.deleteOne(
+            { _id: req.body.goalId }
+        )
+        res.status(200).json({ msg: "بنر با موفقیت حذف شد" });
+    }
+    catch (err) {
+        console.log(err);
+        res.status(400).json({ msg: "Error in Delete Middle Banner" })
+    }
+}
+
+module.exports.deleteMiddleBanner = deleteMiddleBanner;
+
+
+
+const getSingleMiddleBanner = async (req, res) => {
+    
+    try {
+        const goalSingleMidBan = await middleBannerModel.findById(req.params.id)
+        res.status(200).json(goalSingleMidBan);
+    }
+
+    catch (err) {
+        console.log(err);
+        res.status(400).json({ msg: "Error in get Single Middle Banner" })
+    }
+}
+
+module.exports.getSingleMiddleBanner = getSingleMiddleBanner;
+
+
+
+const updateMiddleBanner = async (req, res) => {
+    try {
+
+        await middleBannerModel.updateOne(
             { _id: req.body.goalId },
             {
                 $set: {
@@ -87,12 +104,12 @@ const deleteMiddleBanner = async (req, res) => {
                 }
             }
         )
-        res.status(200).json({ msg: "بنر با موفقیت حذف شد" });
+        res.status(200).json({ msg: "بنر با موفقیت بروزرسانی شد" });
     }
     catch (err) {
         console.log(err);
-        res.status(400).json({ msg: "Error in Delete Middle Banner" })
+        res.status(400).json({ msg: "Error in Update Middle Banner" })
     }
 }
 
-module.exports.deleteMiddleBanner = deleteMiddleBanner;
+module.exports.updateMiddleBanner = updateMiddleBanner;

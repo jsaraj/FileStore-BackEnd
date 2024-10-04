@@ -12,6 +12,7 @@ router.get("/middle-banner", middleBannerCtrl.getAllMidBanner);
 router.post("/new-middle-banner", middleBannerCtrl.newMiddleBanner);
 router.post("/update-middle-banner", middleBannerCtrl.updateMiddleBanner);
 router.post("/delete-middle-banner", middleBannerCtrl.deleteMiddleBanner);
+router.get("/get-single-middle-banner/:id", middleBannerCtrl.getSingleMiddleBanner);
 
 
 module.exports = router;
