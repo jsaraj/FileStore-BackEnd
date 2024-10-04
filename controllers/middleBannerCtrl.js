@@ -1,15 +1,24 @@
 
-const midBannerModel = require("../models/middleBannerModel");
+const middleBannerModel = require("../models/middleBannerModel");
 
 
 const getAllMidBanner = async (req, res) => {
     try {
-        const allMidBanner = await midBannerModel.find();
-        res.status(200).json(allMidBanner);
+        if (req.query.pn) {
+            const paginate = 2;
+            const pageNumber = req.query.pn;
+            const goalMidBanner = await middleBannerModel.find().sort({ _id: -1 }).skip((pageNumber - 1) * paginate).limit(paginate);
+            const allGoalMidBan = await (await middleBannerModel.find()).length;
+            res.status(200).json({ goalMidBanner, allGoalMidBan })
+        } else {
+            const allMidBanner = await middleBannerModel.find();
+            res.status(200).json(allMidBanner);
+        }
+
     }
     catch (err) {
         console.log(err);
-        res.status(400).json({ msg: "Error in Get All Middle Banner" })
+        res.status(400).json({ msg: "Error in Get All Middle Banner...." })
     }
 }
 
@@ -42,3 +51,48 @@ const newMiddleBanner = async (req, res) => {
 }
 
 module.exports.newMiddleBanner = newMiddleBanner;
+
+
+
+const updateMiddleBanner = async (req, res) => {
+    try {
+
+        await middleBannerModel.updateOne(
+            { _id: req.body.goalId }
+        )
+        res.status(200).json({ msg: "بنر با موفقیت بروزرسانی شد" });
+    }
+    catch (err) {
+        console.log(err);
+        res.status(400).json({ msg: "Error in Update Middle Banner" })
+    }
+}
+
+module.exports.updateMiddleBanner = updateMiddleBanner;
+
+
+
+const deleteMiddleBanner = async (req, res) => {
+    try {
+
+        await middleBannerModel.deleteOne(
+            { _id: req.body.goalId },
+            {
+                $set: {
+                    imageUrl: req.body.imageUrl,
+                    imageAlt: req.body.imageAlt,
+                    imageLink: req.body.imageLink,
+                    imageStatus: req.body.imageStatus,
+                    publishDate: new Date().toLocaleDateString('fa-IR', { hour: '2-digit', minute: '2-digit' })
+                }
+            }
+        )
+        res.status(200).json({ msg: "بنر با موفقیت حذف شد" });
+    }
+    catch (err) {
+        console.log(err);
+        res.status(400).json({ msg: "Error in Delete Middle Banner" })
+    }
+}
+
+module.exports.deleteMiddleBanner = deleteMiddleBanner;
