@@ -25,6 +25,21 @@ const getAllPost = async (req, res) => {
 module.exports.getAllPost = getAllPost;
 
 
+const getRelPosts = async (req, res) => {
+    try {
+
+        const allPost = await postModel.find().select({ title: 1 });
+        res.status(200).json(allPost);
+    }
+    catch (err) {
+        console.log(err);
+        res.status(400).json({ msg: "Error in Get All Post...." })
+    }
+}
+
+module.exports.getRelPosts = getRelPosts;
+
+
 const newPost = async (req, res) => {
     try {
         await postModel.create(req.body);

@@ -28,15 +28,18 @@ const postModel = new mongoose.Schema({
     },
     tags: {
         required: true,
-        type: Array
+        type: Array,
+        default: []
     },
     realtedPost: {
         required: true,
-        type: Array
+        type: Array,
+        default: []
     },
     comments: {
         required: true,
-        type: Array
+        type: Array,
+        default: []
     },
     type: {
         required: true,
