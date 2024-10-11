@@ -42,25 +42,10 @@ module.exports.getRelPosts = getRelPosts;
 
 const newPost = async (req, res) => {
     try {
-        await postModel.create(req.body);
+        const data = req.body
+        data.slug = req.body.slug.replace(/\s+/g, '-').toLowerCase();
+        await postModel.create(data);
         res.status(200).json({ msg: "پست با موفقیت ذخیره شد" });
-
-        // const newPost = new postModel({
-        //     imageUrl: req.body.imageUrl,
-        //     imageAlt: req.body.imageAlt,
-        //     imageLink: req.body.imageLink,
-        //     imageStatus: req.body.imageStatus,
-        //     publishDate: new Date().toLocaleDateString('fa-IR', { hour: '2-digit', minute: '2-digit' })
-        // })
-
-        // newPost.save()
-        //     .then(d => {
-        //         res.status(200).json({ msg: "بنر با موفقیت ذخیره شد" });
-        //     })
-        //     .catch(err => {
-        //         console.log(err);
-        //         res.status(200).json({ msg: "خطا در دریافت اطلاعات" })
-        //     })
     }
     catch (err) {
         console.log(err);
@@ -118,23 +103,11 @@ module.exports.getSinglePost = getSinglePost;
 
 const updatePost = async (req, res) => {
     try {
-
-        await postModel.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        const data = req.body
+        data.slug = req.body.slug.replace(/\s+/g, '-').toLowerCase();
+        await postModel.findByIdAndUpdate(req.params.id, data, { new: true });
         res.status(200).json({ msg: "پست با موفقیت بروزرسانی شد" });
 
-        // await postModel.updateOne(
-        //     { _id: req.body.goalId },
-        //     {
-        //         $set: {
-        //             imageUrl: req.body.imageUrl,
-        //             imageAlt: req.body.imageAlt,
-        //             imageLink: req.body.imageLink,
-        //             imageStatus: req.body.imageStatus,
-        //             publishDate: new Date().toLocaleDateString('fa-IR', { hour: '2-digit', minute: '2-digit' })
-        //         }
-        //     }
-        // )
-        // res.status(200).json({ msg: "بنر با موفقیت بروزرسانی شد" });
     }
     catch (err) {
         console.log(err);

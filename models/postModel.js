@@ -8,7 +8,7 @@ const postModel = new mongoose.Schema({
     slug: {
         required: true,
         type: String,
-        trim: true
+        unique: true
     },
     shortDesc: {
         required: true,
