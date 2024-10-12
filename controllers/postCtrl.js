@@ -11,7 +11,7 @@ const getAllPost = async (req, res) => {
             const allGoalPost = await (await postModel.find()).length;
             res.status(200).json({ goalPost, allGoalPost })
         } else {
-            const allPost = await postModel.find();
+            const allPost = await postModel.find().sort({ _id: -1 });
             res.status(200).json(allPost);
         }
 
@@ -28,7 +28,7 @@ module.exports.getAllPost = getAllPost;
 const getRelPosts = async (req, res) => {
     try {
 
-        const allPost = await postModel.find().select({ title: 1 });
+        const allPost = await postModel.find().select({ title: 1, realtedPost: 1 });
         res.status(200).json(allPost);
     }
     catch (err) {
@@ -122,7 +122,7 @@ module.exports.updatePost = updatePost;
 const getActivePosts = async (req, res) => {
 
     try {
-        const goalActivePost = await postModel.find().select({ title: 1, slug: 1, updatesAt: 1, imageUrl: 1, shortDesc: 1, imageAlt: 1, pageView: 1, type: 1 })
+        const goalActivePost = await postModel.find({ published: true }).sort({ _id: -1 }).limit(4).select({ title: 1, slug: 1, updatesAt: 1, imageUrl: 1, shortDesc: 1, imageAlt: 1, pageView: 1, type: 1 })
         res.status(200).json(goalActivePost);
     }
 
@@ -133,3 +133,29 @@ const getActivePosts = async (req, res) => {
 }
 
 module.exports.getActivePosts = getActivePosts;
+
+
+
+
+
+const getBlogPage = async (req, res) => {
+    try {
+        if (req.query.pn && req.query.pgn) {
+            const paginate = req.query.pgn;
+            const pageNumber = req.query.pn;
+            const goalPost = await postModel.find({ published: true }).sort({ _id: -1 }).skip((pageNumber - 1) * paginate).limit(paginate).select({ title: 1, slug: 1, updatesAt: 1, imageUrl: 1, shortDesc: 1, imageAlt: 1, pageView: 1, type: 1 });
+            const allGoalPost = await (await postModel.find({ published: true })).length;
+            res.status(200).json({ goalPost, allGoalPost })
+        } else {
+            const allPost = await postModel.find({ published: true }).sort({ _id: -1 });
+            res.status(200).json(allPost);
+        }
+
+    }
+    catch (err) {
+        console.log(err);
+        res.status(400).json({ msg: "Error in Get All Blog page Post...." })
+    }
+}
+
+module.exports.getBlogPage = getBlogPage;

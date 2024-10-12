@@ -15,6 +15,7 @@ router.post("/update-post/:id", postCtrl.updatePost);
 router.post("/delete-post/:id", postCtrl.deletePost);
 router.get("/get-single-post/:slug", postCtrl.getSinglePost);
 router.get("/get-active-posts", postCtrl.getActivePosts);
+router.get("/get-blog-page", postCtrl.getBlogPage);
 
 
 module.exports = router;
