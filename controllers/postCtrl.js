@@ -159,3 +159,20 @@ const getBlogPage = async (req, res) => {
 }
 
 module.exports.getBlogPage = getBlogPage;
+
+
+
+const getMostViewBlog = async (req, res) => {
+    try {
+
+        const goalPost = await postModel.find({ published: true }).sort({ pageView: -1 }).limit(4).select({ title: 1, slug: 1, pageView: 1 });
+        res.status(200).json(goalPost)
+
+    }
+    catch (err) {
+        console.log(err);
+        res.status(400).json({ msg: "Error in Get Mosted View Blog page Post...." })
+    }
+}
+
+module.exports.getMostViewBlog = getMostViewBlog;

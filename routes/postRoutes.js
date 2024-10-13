@@ -16,6 +16,7 @@ router.post("/delete-post/:id", postCtrl.deletePost);
 router.get("/get-single-post/:slug", postCtrl.getSinglePost);
 router.get("/get-active-posts", postCtrl.getActivePosts);
 router.get("/get-blog-page", postCtrl.getBlogPage);
+router.get("/get-most-view-blog", postCtrl.getMostViewBlog);
 
 
 module.exports = router;
