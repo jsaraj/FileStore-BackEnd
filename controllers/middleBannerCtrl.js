@@ -27,10 +27,18 @@ module.exports.getAllMidBanner = getAllMidBanner;
 
 const newMiddleBanner = async (req, res) => {
     try {
-        await middleBannerModel.create(req.body);
-        res.status(200).json({ msg: "بنر با موفقیت ذخیره شد" });
+        if (req.body.image.endWith(".png") ||
+            req.body.image.endWith(".jpg") ||
+            req.body.image.endWith(".jpeg") ||
+            req.body.image.endWith(".svg") ||
+            req.body.image.endWith(".webp")) {
+            await middleBannerModel.create(req.body);
+            res.status(200).json({ msg: "بنر با موفقیت ذخیره شد" });
+        }
+        else {
+            res.status(422).json({ msg: "فرمت عکس ایراد دارد" })
+        }
 
-    
     }
     catch (err) {
         console.log(err);
@@ -47,7 +55,7 @@ const deleteMiddleBanner = async (req, res) => {
         await middleBannerModel.findByIdAndRemove(req.params.id);
         res.status(200).json({ msg: "بنر با موفقیت حذف شد" });
 
-    
+
     }
     catch (err) {
         console.log(err);
@@ -78,9 +86,18 @@ module.exports.getSingleMiddleBanner = getSingleMiddleBanner;
 
 const updateMiddleBanner = async (req, res) => {
     try {
+        if (req.body.image.endWith(".png") ||
+            req.body.image.endWith(".jpg") ||
+            req.body.image.endWith(".jpeg") ||
+            req.body.image.endWith(".svg") ||
+            req.body.image.endWith(".webp")) {
+            await middleBannerModel.findByIdAndUpdate(req.params.id, req.body, { new: true });
+            res.status(200).json({ msg: "بنر با موفقیت بروزرسانی شد" });
+        }
+        else {
+            res.status(422).json({ msg: "فرمت عکس ایراد دارد" })
+        }
 
-        await middleBannerModel.findByIdAndUpdate(req.params.id, req.body, { new: true });
-        res.status(200).json({ msg: "بنر با موفقیت بروزرسانی شد" });
 
     }
     catch (err) {
@@ -96,6 +113,7 @@ module.exports.updateMiddleBanner = updateMiddleBanner;
 const getActiveMiddleBanner = async (req, res) => {
 
     try {
+
         const goalActiveMidBan = await middleBannerModel.find({ imageStatus: true }).select({ imageUrl: 1, imageAlt: 1, imageLink: 1 })
         res.status(200).json(goalActiveMidBan);
     }

@@ -44,8 +44,18 @@ const newPost = async (req, res) => {
     try {
         const data = req.body
         data.slug = req.body.slug.replace(/\s+/g, '-').toLowerCase();
-        await postModel.create(data);
-        res.status(200).json({ msg: "پست با موفقیت ذخیره شد" });
+        if (req.body.imageUrl.endWith(".png") ||
+            req.body.imageUrl.endWith(".jpg") ||
+            req.body.imageUrl.endWith(".jpeg") ||
+            req.body.imageUrl.endWith(".svg") ||
+            req.body.imageUrl.endWith(".webp")) {
+            await postModel.create(data);
+            res.status(200).json({ msg: "پست با موفقیت ذخیره شد" });
+        }
+        else {
+            res.status(422).json({ msg: "فرمت عکس ایراد دارد" })
+        }
+
     }
     catch (err) {
         console.log(err);
@@ -103,10 +113,19 @@ module.exports.getSinglePost = getSinglePost;
 
 const updatePost = async (req, res) => {
     try {
-        const data = req.body
-        data.slug = req.body.slug.replace(/\s+/g, '-').toLowerCase();
-        await postModel.findByIdAndUpdate(req.params.id, data, { new: true });
-        res.status(200).json({ msg: "پست با موفقیت بروزرسانی شد" });
+        if (req.body.imageUrl.endWith(".png") ||
+            req.body.imageUrl.endWith(".jpg") ||
+            req.body.imageUrl.endWith(".jpeg") ||
+            req.body.imageUrl.endWith(".svg") ||
+            req.body.imageUrl.endWith(".webp")) {
+            const data = req.body
+            data.slug = req.body.slug.replace(/\s+/g, '-').toLowerCase();
+            await postModel.findByIdAndUpdate(req.params.id, data, { new: true });
+            res.status(200).json({ msg: "پست با موفقیت بروزرسانی شد" });
+        }
+        else {
+            res.status(422).json({ msg: "فرمت عکس ایراد دارد" })
+        }
 
     }
     catch (err) {
