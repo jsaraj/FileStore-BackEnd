@@ -176,3 +176,20 @@ const getMostViewBlog = async (req, res) => {
 }
 
 module.exports.getMostViewBlog = getMostViewBlog;
+
+
+
+const postRelatedPosts = async (req, res) => {
+    try {
+        const goalId = req.body.goalId;
+        const goalPost = await postModel.find({ _id: goalId }).select({ title: 1, slug: 1, updatesAt: 1, imageUrl: 1, shortDesc: 1, imageAlt: 1, pageView: 1, type: 1 });
+        res.status(200).json(goalPost)
+
+    }
+    catch (err) {
+        console.log(err);
+        res.status(400).json({ msg: "Error in post Related Post...." })
+    }
+}
+
+module.exports.postRelatedPosts = postRelatedPosts;

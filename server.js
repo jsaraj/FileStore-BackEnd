@@ -5,6 +5,7 @@ const app = express();
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const mongoose = require('mongoose');
+const { MongoClient } = require("mongodb");
 const cors = require('cors');
 require('dotenv/config');
 
@@ -48,6 +49,11 @@ app.use("/api",postRoutes);
 const PORT = process.env.PORT;
 const DB_URL = process.env.DB_URL;
 
+
+const uri =
+    "mongodb+srv://<user>:<password>@<cluster-url>?retryWrites=true&w=majority";
+
+mongoose.set('strictQuery', true);
 mongoose.connect(DB_URL)
   .then(d => {
     console.log("ok");

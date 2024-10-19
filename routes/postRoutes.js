@@ -17,6 +17,8 @@ router.get("/get-single-post/:slug", postCtrl.getSinglePost);
 router.get("/get-active-posts", postCtrl.getActivePosts);
 router.get("/get-blog-page", postCtrl.getBlogPage);
 router.get("/get-most-view-blog", postCtrl.getMostViewBlog);
+router.post("/post-related-posts", postCtrl.postRelatedPosts);
+
 
 
 module.exports = router;
