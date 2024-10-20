@@ -1,6 +1,6 @@
 
 const middleBannerModel = require("../models/middleBannerModel");
-
+const { validationResult } = require("express-validator");
 
 const getAllMidBanner = async (req, res) => {
     try {
@@ -27,16 +27,23 @@ module.exports.getAllMidBanner = getAllMidBanner;
 
 const newMiddleBanner = async (req, res) => {
     try {
-        if (req.body.image.endWith(".png") ||
-            req.body.image.endWith(".jpg") ||
-            req.body.image.endWith(".jpeg") ||
-            req.body.image.endWith(".svg") ||
-            req.body.image.endWith(".webp")) {
-            await middleBannerModel.create(req.body);
-            res.status(200).json({ msg: "بنر با موفقیت ذخیره شد" });
-        }
-        else {
-            res.status(422).json({ msg: "فرمت عکس ایراد دارد" })
+
+        //validation
+        const err = validationResult(req);
+        if (err.isEmpty()) {
+            if (req.body.imageUrl.endsWith(".png") ||
+                req.body.imageUrl.endsWith(".jpg") ||
+                req.body.imageUrl.endsWith(".jpeg") ||
+                req.body.imageUrl.endsWith(".svg") ||
+                req.body.imageUrl.endsWith(".webp")) {
+                await middleBannerModel.create(req.body);
+                res.status(200).json({ msg: "بنر با موفقیت ذخیره شد" });
+            }
+            else {
+                res.status(422).json({ msg: "فرمت عکس ایراد دارد" })
+            }
+        } else {
+            res.status(422).json({ msg: "الت عکس ایراد دارد" })
         }
 
     }
@@ -86,18 +93,25 @@ module.exports.getSingleMiddleBanner = getSingleMiddleBanner;
 
 const updateMiddleBanner = async (req, res) => {
     try {
-        if (req.body.image.endWith(".png") ||
-            req.body.image.endWith(".jpg") ||
-            req.body.image.endWith(".jpeg") ||
-            req.body.image.endWith(".svg") ||
-            req.body.image.endWith(".webp")) {
-            await middleBannerModel.findByIdAndUpdate(req.params.id, req.body, { new: true });
-            res.status(200).json({ msg: "بنر با موفقیت بروزرسانی شد" });
+
+        //validation
+        const err = validationResult(req)
+        if (err.isEmpty()) {
+            if (req.body.imageUrl.endsWith(".png") ||
+                req.body.imageUrl.endsWith(".jpg") ||
+                req.body.imageUrl.endsWith(".jpeg") ||
+                req.body.imageUrl.endsWith(".svg") ||
+                req.body.imageUrl.endsWith(".webp")) {
+                await middleBannerModel.findByIdAndUpdate(req.params.id, req.body, { new: true });
+                res.status(200).json({ msg: "بنر با موفقیت بروزرسانی شد" });
+            }
+            else {
+                res.status(422).json({ msg: "فرمت عکس ایراد دارد" })
+            }
         }
         else {
-            res.status(422).json({ msg: "فرمت عکس ایراد دارد" })
+            res.status(422).json({ msg: "آلت عکس ایراد دارد" })
         }
-
 
     }
     catch (err) {

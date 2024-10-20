@@ -1,6 +1,6 @@
 
 const postModel = require("../models/postModel");
-
+const { validationResult } = require("express-validator");
 
 const getAllPost = async (req, res) => {
     try {
@@ -42,19 +42,29 @@ module.exports.getRelPosts = getRelPosts;
 
 const newPost = async (req, res) => {
     try {
-        const data = req.body
-        data.slug = req.body.slug.replace(/\s+/g, '-').toLowerCase();
-        if (req.body.imageUrl.endWith(".png") ||
-            req.body.imageUrl.endWith(".jpg") ||
-            req.body.imageUrl.endWith(".jpeg") ||
-            req.body.imageUrl.endWith(".svg") ||
-            req.body.imageUrl.endWith(".webp")) {
-            await postModel.create(data);
-            res.status(200).json({ msg: "پست با موفقیت ذخیره شد" });
+
+
+        //validation 
+        const err = validationResult(req);
+        if (err.isEmpty()) {
+            const data = req.body
+            data.slug = req.body.slug.replace(/\s+/g, '-').toLowerCase();
+            if (req.body.imageUrl.endsWith(".png") ||
+                req.body.imageUrl.endsWith(".jpg") ||
+                req.body.imageUrl.endsWith(".jpeg") ||
+                req.body.imageUrl.endsWith(".svg") ||
+                req.body.imageUrl.endsWith(".webp")) {
+                await postModel.create(data);
+                res.status(200).json({ msg: "پست با موفقیت ذخیره شد" });
+            }
+            else {
+                res.status(422).json({ msg: "فرمت عکس ایراد دارد" })
+            }
+        } else {
+            console.log(err)
+            res.status(422).json({ msg: "ایراد دارد" })
         }
-        else {
-            res.status(422).json({ msg: "فرمت عکس ایراد دارد" })
-        }
+
 
     }
     catch (err) {
@@ -113,19 +123,27 @@ module.exports.getSinglePost = getSinglePost;
 
 const updatePost = async (req, res) => {
     try {
-        if (req.body.imageUrl.endWith(".png") ||
-            req.body.imageUrl.endWith(".jpg") ||
-            req.body.imageUrl.endWith(".jpeg") ||
-            req.body.imageUrl.endWith(".svg") ||
-            req.body.imageUrl.endWith(".webp")) {
-            const data = req.body
-            data.slug = req.body.slug.replace(/\s+/g, '-').toLowerCase();
-            await postModel.findByIdAndUpdate(req.params.id, data, { new: true });
-            res.status(200).json({ msg: "پست با موفقیت بروزرسانی شد" });
+
+        //validation
+        const err = validationResult(req)
+        if (err.isEmpty()) {
+            if (req.body.imageUrl.endsWith(".png") ||
+                req.body.imageUrl.endsWith(".jpg") ||
+                req.body.imageUrl.endsWith(".jpeg") ||
+                req.body.imageUrl.endsWith(".svg") ||
+                req.body.imageUrl.endsWith(".webp")) {
+                const data = req.body
+                data.slug = req.body.slug.replace(/\s+/g, '-').toLowerCase();
+                await postModel.findByIdAndUpdate(req.params.id, data, { new: true });
+                res.status(200).json({ msg: "پست با موفقیت بروزرسانی شد" });
+            }
+            else {
+                res.status(422).json({ msg: "فرمت عکس ایراد دارد" })
+            }
+        } else {
+            res.status(422).json({ msg: "ایراد دارد" })
         }
-        else {
-            res.status(422).json({ msg: "فرمت عکس ایراد دارد" })
-        }
+
 
     }
     catch (err) {
