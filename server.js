@@ -41,9 +41,11 @@ app.get("/", (req, res) => {
 
 const MiddleBannerRoutes = require("./routes/middleBannerRoutes");
 const postRoutes = require("./routes/postRoutes");
+const mainsliderRoutes = require("./routes/mainSliderRoutes");
 
 app.use("/api",MiddleBannerRoutes);
 app.use("/api",postRoutes);
+app.use("/api",mainsliderRoutes);
 
 
 const PORT = process.env.PORT;
