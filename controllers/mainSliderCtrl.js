@@ -1,5 +1,5 @@
 
-const MainSliderModel=require("../models/mainSliderModel");
+const MainSliderModel = require("../models/mainSliderModel");
 const { validationResult } = require("express-validator");
 
 
@@ -124,3 +124,22 @@ const deleteMainSlider = async (req, res) => {
 }
 
 module.exports.deleteMainSlider = deleteMainSlider;
+
+
+
+
+const getActiveMainSlider = async (req, res) => {
+
+    try {
+
+        const goalActiveMainSlider = await MainSliderModel.find({ imageStatus: true }).select({ imageSrc: 1, imageAlt: 1, imageLink: 1 })
+        res.status(200).json(goalActiveMainSlider);
+    }
+
+    catch (err) {
+        console.log(err);
+        res.status(400).json({ msg: "Error in get Active Main Slider" })
+    }
+}
+
+module.exports.getActiveMainSlider = getActiveMainSlider;
