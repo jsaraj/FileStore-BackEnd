@@ -56,3 +56,71 @@ const newMainSlider = async (req, res) => {
 }
 
 module.exports.newMainSlider = newMainSlider;
+
+
+
+const getSingleMainSlider = async (req, res) => {
+
+    try {
+        const goalSingleMainSlider = await MainSliderModel.findById(req.params.id)
+        res.status(200).json(goalSingleMainSlider);
+    }
+
+    catch (err) {
+        console.log(err);
+        res.status(400).json({ msg: "Error in get Single Main Slider" })
+    }
+}
+
+module.exports.getSingleMainSlider = getSingleMainSlider;
+
+
+
+
+const updateMainSlider = async (req, res) => {
+    try {
+
+        //validation
+        const err = validationResult(req)
+        if (err.isEmpty()) {
+            if (req.body.imageSrc.endsWith(".png") ||
+                req.body.imageSrc.endsWith(".jpg") ||
+                req.body.imageSrc.endsWith(".jpeg") ||
+                req.body.imageSrc.endsWith(".svg") ||
+                req.body.imageSrc.endsWith(".webp")) {
+                await MainSliderModel.findByIdAndUpdate(req.params.id, req.body, { new: true });
+                res.status(200).json({ msg: "بنر با موفقیت بروزرسانی شد" });
+            }
+            else {
+                res.status(422).json({ msg: "فرمت عکس ایراد دارد" })
+            }
+        }
+        else {
+            res.status(422).json({ msg: "آلت عکس ایراد دارد" })
+        }
+
+    }
+    catch (err) {
+        console.log(err);
+        res.status(400).json({ msg: "Error in Update Main Slider" })
+    }
+}
+
+module.exports.updateMainSlider = updateMainSlider;
+
+
+
+const deleteMainSlider = async (req, res) => {
+    try {
+        await MainSliderModel.findByIdAndRemove(req.params.id);
+        res.status(200).json({ msg: "بنر با موفقیت حذف شد" });
+
+
+    }
+    catch (err) {
+        console.log(err);
+        res.status(400).json({ msg: "Error in Delete Main Slider" })
+    }
+}
+
+module.exports.deleteMainSlider = deleteMainSlider;
